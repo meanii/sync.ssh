@@ -36,6 +36,13 @@ var syncCmd = &cobra.Command{
 	Short: "this command adds to sync the dir/file",
 	Long:  `this command help to set the dir/file to backup!`,
 	Run: func(cmd *cobra.Command, args []string) {
+
+		/* validating if user has passed the dir or file path or not */
+		if len(args) <= 0 {
+			log.Fatal("Pass dir path OR file path, which you want to sync!")
+			return
+		}
+
 		var target = args[0]
 
 		/* initializing database and loading data */
@@ -73,7 +80,7 @@ var syncCmd = &cobra.Command{
 		/* checking if, the dir/file is already in sync or not */
 		sync, _ := db.Find()
 		if utils.IsDuplicate(sync, target) {
-			log.Fatal("You have syncing already this dir/file!")
+			log.Fatal("You have already syncing this dir/file!")
 			return
 		}
 
