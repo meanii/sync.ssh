@@ -17,13 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 package utils
 
-import "github.com/meanii/sync.ssh/model"
+import "os"
 
-func IsDuplicate(sync []model.Sync, target string) bool {
-	for _, s := range sync {
-		if s.Target == target {
-			return true
-		}
+func IsDir(file os.FileInfo) string {
+	if file.IsDir() {
+		return "dir"
 	}
-	return false
+	return "file"
 }

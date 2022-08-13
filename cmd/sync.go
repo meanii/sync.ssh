@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/model"
@@ -36,7 +37,6 @@ var syncCmd = &cobra.Command{
 	Long:  `this command help to set the dir/file to backup!`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var target = args[0]
-		cronjob, _ := cmd.Flags().GetInt("cronjob") /* cronjob its in min */
 
 		/* initializing database and loading data */
 		db := &database.Database{}
@@ -64,11 +64,13 @@ var syncCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		/* getting the owner  */
 		currentUser, err := user.Current()
 		if err != nil {
 			log.Fatalf(err.Error())
 		}
 
+		/* checking if, the dir/file is already in sync or not */
 		sync, _ := db.Find()
 		if utils.IsDuplicate(sync, target) {
 			log.Fatal("You have syncing already this dir/file!")
@@ -79,13 +81,13 @@ var syncCmd = &cobra.Command{
 		err = db.InsertOne(model.Sync{
 			Id:        uuid.New().String(),
 			Target:    target,
-			Cronjob:   cronjob,
 			Type:      utils.IsDir(fileInfo),
 			Status:    "active",
 			CreatedAt: time.Now(),
 			Owner:     currentUser.Username,
 		})
 		if err != nil {
+			fmt.Println("Something went wrong whiling inserting into the database!")
 			return
 		}
 	},
@@ -93,5 +95,4 @@ var syncCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(syncCmd)
-	syncCmd.Flags().IntP("cronjob", "c", 30, "for adding dir")
 }

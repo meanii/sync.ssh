@@ -15,15 +15,24 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package utils
+package cmd
 
-import "github.com/meanii/sync.ssh/model"
+import (
+	"fmt"
 
-func IsDuplicate(sync []model.Sync, target string) bool {
-	for _, s := range sync {
-		if s.Target == target {
-			return true
-		}
-	}
-	return false
+	"github.com/spf13/cobra"
+)
+
+/* initCmd represents the init command */
+var initCmd = &cobra.Command{
+	Use:   "init",
+	Short: "this init command, for init all processes which needed to start and init!",
+	Long:  `this command for init all process, which is needed to start!`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("init called")
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(initCmd)
 }

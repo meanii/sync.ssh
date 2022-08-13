@@ -15,15 +15,26 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package utils
+package cmd
 
-import "github.com/meanii/sync.ssh/model"
+import (
+	"fmt"
 
-func IsDuplicate(sync []model.Sync, target string) bool {
-	for _, s := range sync {
-		if s.Target == target {
-			return true
-		}
-	}
-	return false
+	"github.com/spf13/cobra"
+)
+
+/* configCmd represents the config command */
+var configCmd = &cobra.Command{
+	Use:   "config",
+	Short: "config your sync.ssh settings",
+	Long:  `this command helps us to configure sync.ssh settings such as like cronjob setting!`,
+	Run: func(cmd *cobra.Command, args []string) {
+		cronjob, _ := cmd.Flags().GetInt("cronjob")
+		fmt.Println("config called", cronjob)
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(configCmd)
+	configCmd.Flags().IntP("cronjob", "c", 0, "cronjob timing, so which you gonna set up it will run the deamon service!")
 }

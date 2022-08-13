@@ -15,15 +15,24 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package utils
+package cmd
 
-import "github.com/meanii/sync.ssh/model"
+import (
+	"fmt"
 
-func IsDuplicate(sync []model.Sync, target string) bool {
-	for _, s := range sync {
-		if s.Target == target {
-			return true
-		}
-	}
-	return false
+	"github.com/spf13/cobra"
+)
+
+/* authCmd represents the auth command */
+var authCmd = &cobra.Command{
+	Use:   "auth",
+	Short: "sync.ssh allow to login with your github account with specific permissions and repo!",
+	Long:  `this command  allow to login with your github account with specific permissions and repo to keep syncing your files/dir!`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("auth called")
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(authCmd)
 }
