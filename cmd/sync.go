@@ -18,7 +18,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
 	"github.com/google/uuid"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/model"
@@ -38,8 +37,6 @@ var syncCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var target = args[0]
 		cronjob, _ := cmd.Flags().GetInt("cronjob") /* cronjob its in min */
-
-		fmt.Println(cronjob, target)
 
 		/* initializing database and loading data */
 		db := &database.Database{}
@@ -70,6 +67,12 @@ var syncCmd = &cobra.Command{
 		currentUser, err := user.Current()
 		if err != nil {
 			log.Fatalf(err.Error())
+		}
+
+		sync, _ := db.Find()
+		if utils.IsDuplicate(sync, target) {
+			log.Fatal("You have syncing already this dir/file!")
+			return
 		}
 
 		/* inserting data to the db */

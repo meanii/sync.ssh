@@ -34,6 +34,12 @@ func (d *Database) Find() (Database, error) {
 		log.Fatal("something went wrong while reading database!")
 		return nil, err
 	}
+
+	/* if found empty database then return blank array */
+	if len(data) == 0 {
+		return Database{}, nil
+	}
+
 	err = json.Unmarshal(data, &sync)
 	if err != nil {
 		log.Fatal("something went wrong while unmarshalling data!")
