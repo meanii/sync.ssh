@@ -95,7 +95,6 @@ var syncCmd = &cobra.Command{
 		})
 		if err != nil {
 			fmt.Println("Something went wrong whiling inserting into the database!")
-			return
 		}
 	},
 }

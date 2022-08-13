@@ -36,6 +36,7 @@ var authCmd = &cobra.Command{
 
 		user.Token = token
 		user.Github = username
+		user.Auth = true
 
 		/* adding token and the username to the database */
 		_ = user.Save(user)

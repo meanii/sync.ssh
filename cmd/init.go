@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/spf13/cobra"
@@ -50,6 +51,7 @@ var initCmd = &cobra.Command{
 		user.Repo = repo
 
 		_ = user.Save(user)
+		fmt.Println("Your sync.ssh has been established!")
 	},
 }
 

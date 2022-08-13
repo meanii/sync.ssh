@@ -19,6 +19,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/meanii/sync.ssh/database"
 
 	"github.com/spf13/cobra"
 )
@@ -30,7 +31,12 @@ var configCmd = &cobra.Command{
 	Long:  `this command helps us to configure sync.ssh settings such as like cronjob setting!`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cronjob, _ := cmd.Flags().GetInt("cronjob")
-		fmt.Println("config called", cronjob)
+		user := database.User{}
+		_ = user.Load()
+		user.Cronjob = cronjob
+		_ = user.Save(user)
+		fmt.Println("Your new configuration has been saved!")
+		fmt.Printf("Cronjob %v \n", cronjob)
 	},
 }
 
