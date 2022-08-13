@@ -25,48 +25,28 @@ import (
 	"os"
 )
 
-var syncPath = `.sync.json`
+var userPath = ".user.json"
 
-type Database []model.Sync
+type User model.User
 
-func (d *Database) InsertOne(sync model.Sync) error {
-	*d = append(*d, sync)
-	data, err := json.Marshal(*d)
+func (u *User) Save(user model.User) error {
+	/* marshalling the object */
+	data, err := json.Marshal(user)
 	if err != nil {
 		log.Fatal("something went wrong while marshaling data!")
-		return err
 	}
-	err = os.WriteFile(syncPath, data, 0644)
+
+	/* writing the object to the db */
+	err = os.WriteFile(userPath, data, 0644)
 	if err != nil {
-		log.Fatal(err)
-		return err
+		log.Fatal("something went wrong, while writing to db!")
 	}
 	return nil
 }
 
-func (d *Database) Find() (Database, error) {
-	var sync Database
-	data, err := os.ReadFile(syncPath)
-	if err != nil {
-		log.Fatal("something went wrong while reading database!")
-		return nil, err
-	}
-
-	/* if found empty database then return blank array */
-	if len(data) == 0 {
-		return Database{}, nil
-	}
-
-	err = json.Unmarshal(data, &sync)
-	if err != nil {
-		log.Fatal("something went wrong while unmarshalling data!")
-		return nil, err
-	}
-	return sync, nil
-}
-
-func (d *Database) Load() error {
-	file, err := os.ReadFile(syncPath)
+func (u *User) Load() error {
+	/* reading the user db file, and if not exist then return blank object */
+	file, err := os.ReadFile(userPath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil
@@ -78,7 +58,8 @@ func (d *Database) Load() error {
 		return err
 	}
 
-	err = json.Unmarshal(file, d)
+	/* unmarshalling the object */
+	err = json.Unmarshal(file, u)
 	if err != nil {
 		return err
 	}
