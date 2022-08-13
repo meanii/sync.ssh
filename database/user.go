@@ -29,7 +29,7 @@ var userPath = ".user.json"
 
 type User model.User
 
-func (u *User) Save(user model.User) error {
+func (u *User) Save(user User) error {
 	/* marshalling the object */
 	data, err := json.Marshal(user)
 	if err != nil {
@@ -42,6 +42,17 @@ func (u *User) Save(user model.User) error {
 		log.Fatal("something went wrong, while writing to db!")
 	}
 	return nil
+}
+
+func (u *User) SaveToken(token string) {
+	_ = u.Load()
+	u.Token = token
+	_ = u.Save(*u)
+}
+
+func (u *User) GetToken() string {
+	_ = u.Load()
+	return u.Token
 }
 
 func (u *User) Load() error {

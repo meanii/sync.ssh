@@ -15,20 +15,20 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package model
+package github
 
-import "time"
+import (
+	"context"
+	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
+)
 
-type User struct {
-	Id           string
-	Owner        string
-	Cronjob      int
-	LastCheckout time.Time
-	CreatedAt    time.Time
-	TotalSync    int
-	Auth         bool
-	Token        string
-	Repo         string
-	Github       string
-	Health       string
+func Github() (context.Context, *github.Client) {
+	_context := context.Background()
+	tokenService := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: "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"},
+	)
+	tokenClient := oauth2.NewClient(_context, tokenService)
+	client := github.NewClient(tokenClient)
+	return _context, client
 }

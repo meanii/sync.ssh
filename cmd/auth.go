@@ -18,8 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/meanii/sync.ssh/database"
 	"github.com/spf13/cobra"
 )
 
@@ -29,10 +28,22 @@ var authCmd = &cobra.Command{
 	Short: "sync.ssh allow to login with your github account with specific permissions and repo!",
 	Long:  `this command  allow to login with your github account with specific permissions and repo to keep syncing your files/dir!`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("auth called")
+		username, _ := cmd.Flags().GetString("username")
+		token, _ := cmd.Flags().GetString("token")
+
+		user := database.User{}
+		_ = user.Load() /* loading all the pre config */
+
+		user.Token = token
+		user.Github = username
+
+		/* adding token and the username to the database */
+		_ = user.Save(user)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(authCmd)
+	authCmd.Flags().StringP("username", "u", "", "your github username!")
+	authCmd.Flags().StringP("token", "t", "", "your github token!")
 }
