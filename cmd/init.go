@@ -18,9 +18,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/google/uuid"
+	"github.com/meanii/sync.ssh/database"
 	"github.com/spf13/cobra"
+	"log"
+	osuser "os/user"
+	"time"
 )
 
 /* initCmd represents the init command */
@@ -29,10 +32,28 @@ var initCmd = &cobra.Command{
 	Short: "this init command, for init all processes which needed to start and init!",
 	Long:  `this command for init all process, which is needed to start!`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("init called")
+		repo, _ := cmd.Flags().GetString("repo")
+
+		user := database.User{}
+		_ = user.Load()
+
+		/* getting the owner  */
+		currentUser, err := osuser.Current()
+		if err != nil {
+			log.Fatalf(err.Error())
+		}
+
+		user.Id = uuid.New().String()
+		user.Owner = currentUser.Username
+		user.CreatedAt = time.Now()
+		user.Cronjob = 30
+		user.Repo = repo
+
+		_ = user.Save(user)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(initCmd)
+	initCmd.Flags().StringP("repo", "r", "", "your github repositorie name, which your created for sync!")
 }
