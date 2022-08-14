@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package service
 
 import (
+	"fmt"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/github"
 )
@@ -32,5 +33,8 @@ func Deamon() {
 	_ = _database.Load()
 
 	sync, _ := _database.Find()
-	_github.Push(sync[0].Target)
+	for index, s := range sync {
+		fmt.Printf("%v. pushing %v Type: %v\n", index+1, s.Target, s.Type)
+		_github.Push(s.SymlinkAddress, "sync.ssh/")
+	}
 }

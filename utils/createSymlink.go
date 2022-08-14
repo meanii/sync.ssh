@@ -23,7 +23,7 @@ import (
 	"os"
 )
 
-func CreateSymlink(file string) {
+func CreateSymlink(file string) string {
 	fileInfo := GetFileInfo(file)
 
 	/* loading database */
@@ -37,4 +37,5 @@ func CreateSymlink(file string) {
 	if err != nil {
 		log.Fatalf("Something went wrong while creatign symlink! Reason: %v", err)
 	}
+	return target
 }

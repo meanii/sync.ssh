@@ -18,12 +18,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package utils
 
 import (
+	"fmt"
 	"github.com/meanii/sync.ssh/config"
 	"strings"
 )
 
 func GetFilePath(path string) string {
-	var newPath string
-	strings.Replace(newPath, path, config.GetWorkingDir(), 1)
-	return newPath
+	return fmt.Sprint(strings.Replace(path, config.GetSymlinkPath()+"/", "", 1))
 }

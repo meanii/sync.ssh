@@ -20,10 +20,11 @@ package model
 import "time"
 
 type Sync struct {
-	Id        string    `json:"id"`
-	Target    string    `json:"target"`
-	Type      string    `json:"fileType"`
-	CreatedAt time.Time `json:"createdAt"`
-	Status    string    `json:"status"`
-	Owner     string    `json:"owner"`
+	Id             string    `json:"id"`
+	Target         string    `json:"target"`
+	SymlinkAddress string    `json:"symlink_address"`
+	Type           string    `json:"fileType"`
+	CreatedAt      time.Time `json:"createdAt"`
+	Status         string    `json:"status"`
+	Owner          string    `json:"owner"`
 }

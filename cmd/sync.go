@@ -85,20 +85,22 @@ var syncCmd = &cobra.Command{
 		}
 
 		/* create symlink */
-		utils.CreateSymlink(target)
+		symlinkAddress := utils.CreateSymlink(target)
 
 		/* inserting data to the db */
 		err = db.InsertOne(model.Sync{
-			Id:        uuid.New().String(),
-			Target:    target,
-			Type:      utils.IsDir(fileInfo),
-			Status:    "active",
-			CreatedAt: time.Now(),
-			Owner:     currentUser.Username,
+			Id:             uuid.New().String(),
+			Target:         target,
+			Type:           utils.IsDir(fileInfo),
+			Status:         "active",
+			CreatedAt:      time.Now(),
+			Owner:          currentUser.Username,
+			SymlinkAddress: symlinkAddress,
 		})
 		if err != nil {
 			fmt.Println("Something went wrong whiling inserting into the database!")
 		}
+		fmt.Printf("the %v '%v' has been added for sync!\n", utils.IsDir(fileInfo), fileInfo.Name())
 	},
 }
 
