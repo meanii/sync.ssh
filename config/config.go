@@ -24,23 +24,23 @@ import (
 )
 
 func GetUserDBPath() string {
-	userdb := "/.user.json"
+	userDb := "/.user.json"
 	dirname, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	configPath := filepath.Join(dirname, ".meanii/sync/config")
-	return configPath + userdb
+	return configPath + userDb
 }
 
 func GetSyncDBPath() string {
-	syncdb := "/.sync.json"
+	syncDb := "/.sync.json"
 	dirname, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
-	configPath := filepath.Join(dirname, ".meanii/sync/config")
-	return configPath + syncdb
+	configPath := filepath.Join(dirname, ".meanii/sync")
+	return configPath + syncDb
 }
 
 func GetWorkingDir() string {
