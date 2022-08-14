@@ -20,14 +20,41 @@ package service
 import (
 	"fmt"
 	"github.com/meanii/sync.ssh/database"
+	"github.com/meanii/sync.ssh/github"
+	"log"
 )
 
 func Deamon() {
+
 	_database := database.Database{}
+	_user := database.User{}
+	_github := github.GitService{}
+
+	_ = _user.Load()
 	_ = _database.Load()
+
 	sync, _ := _database.Find()
-	for _, s := range sync {
-		fmt.Println(s.Target)
-		fmt.Println(s.Type)
+	fmt.Println(sync)
+	_github.Init(sync[0].Target)
+
+	ref, err := _github.GetRef()
+	if err != nil {
+		log.Fatalf("Unable to get/create the commit reference: %s\n", err)
 	}
+
+	if ref == nil {
+		log.Fatalf("No error where returned but the reference is nil")
+	}
+
+	fmt.Println(ref)
+
+	tree, err := _github.GetTree(ref)
+	if err != nil {
+		log.Fatalf("Unable to create the tree based on the provided files: %s\n", err)
+	}
+
+	if err := _github.PushCommit(ref, tree); err != nil {
+		log.Fatalf("Unable to create the commit: %s\n", err)
+	}
+
 }

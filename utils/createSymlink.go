@@ -32,7 +32,7 @@ func CreateSymlink(file string) {
 
 	/* handling symlink for file */
 	target := user.SymlinkPath + "/" + fileInfo.Name()
-	/* creating symlink file */
+	/* creating symlink file and dir */
 	err := os.Symlink(file, target)
 	if err != nil {
 		log.Fatalf("Something went wrong while creatign symlink! Reason: %v", err)
