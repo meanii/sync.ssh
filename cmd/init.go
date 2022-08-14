@@ -20,6 +20,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/utils"
 	"github.com/spf13/cobra"
@@ -53,6 +54,11 @@ var initCmd = &cobra.Command{
 
 		/* checking, if user has entered a valid repo or not */
 		utils.CheckRepo(repo)
+
+		/* creating working dir */
+		workingDir := config.GetWorkingDir()
+		utils.CreateWorkingDir(workingDir)
+		user.UserDBPath = config.GetUserDBPath()
 
 		_ = user.Save(user)
 		fmt.Println("Your sync.ssh has been established!")

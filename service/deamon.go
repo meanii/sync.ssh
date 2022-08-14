@@ -15,23 +15,19 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package model
+package service
 
-import "time"
+import (
+	"fmt"
+	"github.com/meanii/sync.ssh/database"
+)
 
-type User struct {
-	Id           string
-	Owner        string
-	Cronjob      int
-	LastCheckout time.Time
-	CreatedAt    time.Time
-	TotalSync    int
-	Auth         bool
-	Token        string
-	Repo         string
-	Github       string
-	Health       string
-	UserDBPath   string
-	SyncDBPath   string
-	WorkingDir   string
+func Deamon() {
+	_database := database.Database{}
+	_ = _database.Load()
+	sync, _ := _database.Find()
+	for _, s := range sync {
+		fmt.Println(s.Target)
+		fmt.Println(s.Type)
+	}
 }

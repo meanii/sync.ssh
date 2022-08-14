@@ -20,12 +20,13 @@ package database
 import (
 	"encoding/json"
 	"errors"
+	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/model"
 	"log"
 	"os"
 )
 
-var syncPath = `.sync.json`
+var syncPath = config.GetSyncDBPath()
 
 type Database []model.Sync
 
@@ -41,6 +42,13 @@ func (d *Database) InsertOne(sync model.Sync) error {
 		log.Fatal(err)
 		return err
 	}
+
+	/* adding the working into the user db */
+	user := User{}
+	user.Load()
+	user.SyncDBPath = syncPath
+	user.Save(user)
+
 	return nil
 }
 
@@ -48,7 +56,9 @@ func (d *Database) Find() (Database, error) {
 	var sync Database
 	data, err := os.ReadFile(syncPath)
 	if err != nil {
-		log.Fatal("something went wrong while reading database!")
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, nil
+		}
 		return nil, err
 	}
 

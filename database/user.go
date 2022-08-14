@@ -20,12 +20,13 @@ package database
 import (
 	"encoding/json"
 	"errors"
+	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/model"
 	"log"
 	"os"
 )
 
-var userPath = ".user.json"
+var userPath = config.GetUserDBPath()
 
 type User model.User
 

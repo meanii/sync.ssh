@@ -15,23 +15,23 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package model
+package cmd
 
-import "time"
+import (
+	"github.com/meanii/sync.ssh/service"
+	"github.com/spf13/cobra"
+)
 
-type User struct {
-	Id           string
-	Owner        string
-	Cronjob      int
-	LastCheckout time.Time
-	CreatedAt    time.Time
-	TotalSync    int
-	Auth         bool
-	Token        string
-	Repo         string
-	Github       string
-	Health       string
-	UserDBPath   string
-	SyncDBPath   string
-	WorkingDir   string
+/* deamonCmd represents the deamon command */
+var deamonCmd = &cobra.Command{
+	Use:   "deamon",
+	Short: "this command, is use for deamon service!",
+	Long:  `this command is use for background deamon service, which make sures your all files are sync!`,
+	Run: func(cmd *cobra.Command, args []string) {
+		service.Deamon()
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(deamonCmd)
 }

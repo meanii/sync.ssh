@@ -15,23 +15,16 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package model
+package utils
 
-import "time"
+import (
+	"log"
+	"os"
+)
 
-type User struct {
-	Id           string
-	Owner        string
-	Cronjob      int
-	LastCheckout time.Time
-	CreatedAt    time.Time
-	TotalSync    int
-	Auth         bool
-	Token        string
-	Repo         string
-	Github       string
-	Health       string
-	UserDBPath   string
-	SyncDBPath   string
-	WorkingDir   string
+func CreateWorkingDir(folderPath string) {
+	err := os.MkdirAll(folderPath, os.ModePerm)
+	if err != nil {
+		log.Fatalf("Something went wrong while create dir! Reason %v", err)
+	}
 }
