@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/meanii/sync.ssh/database"
+	"github.com/meanii/sync.ssh/utils"
 	"github.com/spf13/cobra"
 	"log"
 	osuser "os/user"
@@ -49,6 +50,9 @@ var initCmd = &cobra.Command{
 		user.CreatedAt = time.Now()
 		user.Cronjob = 30
 		user.Repo = repo
+
+		/* checking, if user has entered a valid repo or not */
+		utils.CheckRepo(repo)
 
 		_ = user.Save(user)
 		fmt.Println("Your sync.ssh has been established!")
