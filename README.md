@@ -1,7 +1,7 @@
 # sync.ssh
 
-> a powerful cli tool developed in golang that will allow you sync your crucial files and dirtatories in your personal
-> private repository!
+> A powerful CLI tool built in golang that helps to sync your projects (files & directories) to your personal or private
+> repository!
 
 ## Installation
 
