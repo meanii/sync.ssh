@@ -22,22 +22,24 @@ import (
 	"github.com/google/go-github/github"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/model"
+	"github.com/meanii/sync.ssh/utils"
+	"log"
 	"strings"
 	"time"
 )
 
 type GitService model.GithubSt
 
-func (g *GitService) Init(files string) {
+func (g *GitService) init(files string) {
 	user := database.User{}
 	_ = user.Load()
 
-	commitMessage := "update repo!"
 	baseBranch := "main"
 	authorName := "Anil"
 	authorEmail := "anilchauhanxda@gmail.com"
+	commitMessage := fmt.Sprintf("this is auto commit by sync.ssh!")
 
-	g.GithubClient()
+	g.githubClient()
 	g.SourceOwner = &user.Github
 	g.SourceRepo = &user.Repo
 	g.CommitMessage = &commitMessage
@@ -47,13 +49,13 @@ func (g *GitService) Init(files string) {
 	g.AuthorEmail = &authorEmail
 }
 
-func (g *GitService) GithubClient() {
+func (g *GitService) githubClient() {
 	user := database.User{}
 	_ = user.Load()
 	g.Ctx, g.Client = Github(user.Token)
 }
 
-func (g *GitService) GetRef() (ref *github.Reference, err error) {
+func (g *GitService) getRef() (ref *github.Reference, err error) {
 	if ref, _, err = g.Client.Git.GetRef(g.Ctx, *g.SourceOwner, *g.SourceRepo, "refs/heads/"+*g.BaseBranch); err == nil {
 		return ref, nil
 	}
@@ -70,17 +72,18 @@ func (g *GitService) GetRef() (ref *github.Reference, err error) {
 /*getTree generates the tree to commit based on the given files and the commit
 of the ref you got in getRef.*/
 
-func (g *GitService) GetTree(ref *github.Reference) (tree *github.Tree, err error) {
+func (g *GitService) getTree(ref *github.Reference) (tree *github.Tree, err error) {
 	/* Create a tree with what to commit. */
 	var entries []github.TreeEntry
 
 	/* Load each file into the tree. */
 	for _, fileArg := range strings.Split(*g.SourceFiles, ",") {
-		fmt.Println(fileArg)
+		file := utils.GetGitFile(fileArg)
+		fmt.Println(file.FilePath)
 		if err != nil {
 			return nil, err
 		}
-		entries = append(entries, github.TreeEntry{Path: github.String("no/really/yes.txt"), Type: github.String("blob"), Content: github.String(string("hello ok")), Mode: github.String("100644")})
+		entries = append(entries, github.TreeEntry{Path: github.String("no/really/cool.txt"), Type: github.String("blob"), Content: github.String("hello ok"), Mode: github.String("100644")})
 	}
 
 	tree, _, err = g.Client.Git.CreateTree(g.Ctx, *g.SourceOwner, *g.SourceRepo, *ref.Object.SHA, entries)
@@ -89,7 +92,7 @@ func (g *GitService) GetTree(ref *github.Reference) (tree *github.Tree, err erro
 
 /* pushCommit creates the commit in the given reference using the given tree. */
 
-func (g *GitService) PushCommit(ref *github.Reference, tree *github.Tree) (err error) {
+func (g *GitService) pushCommit(ref *github.Reference, tree *github.Tree) (err error) {
 	/* Get the parent commit to attach the commit to. */
 	parent, _, err := g.Client.Repositories.GetCommit(g.Ctx, *g.SourceOwner, *g.SourceRepo, *ref.Object.SHA)
 	if err != nil {
@@ -111,4 +114,26 @@ func (g *GitService) PushCommit(ref *github.Reference, tree *github.Tree) (err e
 	ref.Object.SHA = newCommit.SHA
 	_, _, err = g.Client.Git.UpdateRef(g.Ctx, *g.SourceOwner, *g.SourceRepo, ref, false)
 	return err
+}
+
+func (g *GitService) Push(target string) {
+	g.init(target)
+
+	ref, err := g.getRef()
+	if err != nil {
+		log.Fatalf("Unable to get/create the commit reference: %s\n", err)
+	}
+
+	if ref == nil {
+		log.Fatalf("No error where returned but the reference is nil")
+	}
+
+	tree, err := g.getTree(ref)
+	if err != nil {
+		log.Fatalf("Unable to create the tree based on the provided files: %s\n", err)
+	}
+
+	if err := g.pushCommit(ref, tree); err != nil {
+		log.Fatalf("Unable to create the commit: %s\n", err)
+	}
 }

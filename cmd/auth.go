@@ -19,7 +19,7 @@ package cmd
 
 import (
 	"github.com/meanii/sync.ssh/database"
-	"github.com/meanii/sync.ssh/utils"
+	"github.com/meanii/sync.ssh/validator"
 	"github.com/spf13/cobra"
 )
 
@@ -40,7 +40,7 @@ var authCmd = &cobra.Command{
 		user.Auth = true
 
 		/* validating, if toke is valid or not */
-		utils.CheckToken(token)
+		validator.CheckToken(token)
 
 		/* adding token and the username to the database */
 		_ = user.Save(user)

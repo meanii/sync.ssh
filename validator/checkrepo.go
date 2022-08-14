@@ -15,22 +15,20 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package service
+package validator
 
 import (
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/github"
+	"log"
 )
 
-func Deamon() {
-
-	_database := database.Database{}
-	_user := database.User{}
-	_github := github.GitService{}
-
-	_ = _user.Load()
-	_ = _database.Load()
-
-	sync, _ := _database.Find()
-	_github.Push(sync[0].Target)
+func CheckRepo(repo string) {
+	user := database.User{}
+	user.Load()
+	ctx, client := github.Github(user.Token)
+	_, _, err := client.Repositories.Get(ctx, user.Github, repo)
+	if err != nil {
+		log.Fatalf("Couldn't get the repo in your account! Reason: %v", err)
+	}
 }

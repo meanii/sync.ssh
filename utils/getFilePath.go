@@ -15,22 +15,15 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package service
+package utils
 
 import (
-	"github.com/meanii/sync.ssh/database"
-	"github.com/meanii/sync.ssh/github"
+	"github.com/meanii/sync.ssh/config"
+	"strings"
 )
 
-func Deamon() {
-
-	_database := database.Database{}
-	_user := database.User{}
-	_github := github.GitService{}
-
-	_ = _user.Load()
-	_ = _database.Load()
-
-	sync, _ := _database.Find()
-	_github.Push(sync[0].Target)
+func GetFilePath(path string) string {
+	var newPath string
+	strings.Replace(newPath, path, config.GetWorkingDir(), 1)
+	return newPath
 }

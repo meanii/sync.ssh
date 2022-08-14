@@ -18,17 +18,29 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package utils
 
 import (
-	"github.com/meanii/sync.ssh/database"
-	"github.com/meanii/sync.ssh/github"
 	"log"
+	"os"
 )
 
-func CheckRepo(repo string) {
-	user := database.User{}
-	user.Load()
-	ctx, client := github.Github(user.Token)
-	_, _, err := client.Repositories.Get(ctx, user.Github, repo)
-	if err != nil {
-		log.Fatalf("Couldn't get the repo in your account! Reason: %v", err)
+type GitFile struct {
+	Content  string
+	FilePath string
+	FileName string
+}
+
+func GetGitFile(filePath string) GitFile {
+	fileInfo := GetFileInfo(filePath)
+	if !fileInfo.IsDir() {
+		/* handling for file */
+		data, err := os.ReadFile(filePath)
+		if err != nil {
+			log.Fatalf("Something went wrong while getting content of the file! Reason: %v", err)
+		}
+		return GitFile{
+			Content:  string(data),
+			FilePath: GetFilePath(filePath),
+			FileName: fileInfo.Name(),
+		}
 	}
+	return GitFile{}
 }

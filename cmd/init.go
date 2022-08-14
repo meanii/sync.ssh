@@ -23,6 +23,7 @@ import (
 	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/utils"
+	"github.com/meanii/sync.ssh/validator"
 	"github.com/spf13/cobra"
 	"log"
 	osuser "os/user"
@@ -53,7 +54,7 @@ var initCmd = &cobra.Command{
 		user.Repo = repo
 
 		/* checking, if user has entered a valid repo or not */
-		utils.CheckRepo(repo)
+		validator.CheckRepo(repo)
 
 		/* creating working dir */
 		workingDir := config.GetWorkingDir()
