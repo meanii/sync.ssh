@@ -15,23 +15,17 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package model
+package utils
 
-import "time"
+import (
+	"log"
+	"os"
+)
 
-type User struct {
-	Id           string
-	Owner        string
-	Cronjob      int
-	LastCheckout time.Time
-	CreatedAt    time.Time
-	TotalSync    int
-	Auth         bool
-	Token        string
-	Repo         string
-	Github       string
-	Health       string
-	UserDBPath   string
-	SyncDBPath   string
-	SymlinkPath  string
+func GetFileInfo(path string) os.FileInfo {
+	fileInfo, err := os.Lstat(path)
+	if err != nil {
+		log.Fatalf("Something went wrong while getting file info! Reason: %v", err)
+	}
+	return fileInfo
 }

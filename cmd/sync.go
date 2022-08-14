@@ -84,6 +84,9 @@ var syncCmd = &cobra.Command{
 			return
 		}
 
+		/* create symlink */
+		utils.CreateSymlink(target)
+
 		/* inserting data to the db */
 		err = db.InsertOne(model.Sync{
 			Id:        uuid.New().String(),

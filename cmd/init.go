@@ -60,6 +60,11 @@ var initCmd = &cobra.Command{
 		utils.CreateWorkingDir(workingDir)
 		user.UserDBPath = config.GetUserDBPath()
 
+		/* creating symlink dir */
+		symlinkPath := config.GetSymlinkPath()
+		utils.CreateWorkingDir(symlinkPath)
+		user.SymlinkPath = symlinkPath
+
 		_ = user.Save(user)
 		fmt.Println("Your sync.ssh has been established!")
 	},

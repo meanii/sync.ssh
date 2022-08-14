@@ -33,6 +33,15 @@ func GetUserDBPath() string {
 	return configPath + userDb
 }
 
+func GetSymlinkPath() string {
+	dirname, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
+	}
+	configPath := filepath.Join(dirname, ".meanii/sync/symlink")
+	return configPath
+}
+
 func GetSyncDBPath() string {
 	syncDb := "/.sync.json"
 	dirname, err := os.UserHomeDir()

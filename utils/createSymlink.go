@@ -15,23 +15,28 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package model
+package utils
 
-import "time"
+import (
+	"github.com/meanii/sync.ssh/database"
+	"log"
+	"os"
+)
 
-type User struct {
-	Id           string
-	Owner        string
-	Cronjob      int
-	LastCheckout time.Time
-	CreatedAt    time.Time
-	TotalSync    int
-	Auth         bool
-	Token        string
-	Repo         string
-	Github       string
-	Health       string
-	UserDBPath   string
-	SyncDBPath   string
-	SymlinkPath  string
+func CreateSymlink(file string) {
+	fileInfo := GetFileInfo(file)
+
+	/* loading database */
+	user := database.User{}
+	_ = user.Load()
+
+	if !fileInfo.IsDir() {
+		/* handling symlink for file */
+		target := user.SymlinkPath + "/" + fileInfo.Name()
+		/* creating symlink file */
+		err := os.Symlink(file, target)
+		if err != nil {
+			log.Fatalf("Something went wrong while creatign symlink! Reason: %v", err)
+		}
+	}
 }
