@@ -76,12 +76,13 @@ func (g *GitService) getTree(ref *github.Reference, rootPath string) (tree *gith
 	var entries []github.TreeEntry
 
 	/* Load each file into the tree. */
-	file := utils.GetGitFile(*g.SourceFiles)
-	if err != nil {
-		return nil, err
+	files := utils.GetGitFiles(*g.SourceFiles)
+	for _, file := range files {
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, github.TreeEntry{Path: github.String(rootPath + file.FilePath), Type: github.String("blob"), Content: github.String(file.Content), Mode: github.String("100644")})
 	}
-	entries = append(entries, github.TreeEntry{Path: github.String(rootPath + file.FilePath), Type: github.String("blob"), Content: github.String(file.Content), Mode: github.String("100644")})
-
 	tree, _, err = g.Client.Git.CreateTree(g.Ctx, *g.SourceOwner, *g.SourceRepo, *ref.Object.SHA, entries)
 	return tree, err
 }

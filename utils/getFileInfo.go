@@ -23,9 +23,24 @@ import (
 )
 
 func GetFileInfo(path string) os.FileInfo {
-	fileInfo, err := os.Lstat(path)
+	file, err := os.Open(path)
 	if err != nil {
 		log.Fatalf("Something went wrong while getting file info! Reason: %v", err)
 	}
+
+	/* closing the opened file, in the end of the process */
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal("Something went wrong, while closing the db!")
+		}
+	}(file)
+
+	/* This returns an *os.FileInfo type */
+	fileInfo, err := file.Stat()
+	if err != nil {
+		log.Fatalf("something went wrong while getting stat! Reason %v", err)
+	}
+
 	return fileInfo
 }

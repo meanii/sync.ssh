@@ -28,19 +28,43 @@ type GitFile struct {
 	FileName string
 }
 
-func GetGitFile(filePath string) GitFile {
+var GitFiles []GitFile
+
+func getFileData(filePath string) GitFile {
+	data, err := os.ReadFile(filePath)
 	fileInfo := GetFileInfo(filePath)
-	if !fileInfo.IsDir() {
-		/* handling for file */
-		data, err := os.ReadFile(filePath)
-		if err != nil {
-			log.Fatalf("Something went wrong while getting content of the file! Reason: %v", err)
-		}
-		return GitFile{
-			Content:  string(data),
-			FilePath: GetFilePath(filePath),
-			FileName: fileInfo.Name(),
+	if err != nil {
+		log.Fatalf("Something went wrong while getting content of the file! Reason: %v", err)
+	}
+	return GitFile{
+		Content:  string(data),
+		FilePath: GetFilePath(filePath),
+		FileName: fileInfo.Name(),
+	}
+}
+
+func getDirData(filePath string) []GitFile {
+	files, err := os.ReadDir(filePath)
+	if err != nil {
+		log.Fatalf("Something went wrong while read %v dir!\n", filePath)
+	}
+
+	for _, file := range files {
+		if !file.IsDir() {
+			GitFiles = append(GitFiles, getFileData(filePath+"/"+file.Name()))
+		} else {
+			getDirData(filePath + "/" + file.Name())
 		}
 	}
-	return GitFile{}
+	return GitFiles
+}
+
+func GetGitFiles(filePath string) []GitFile {
+	fileInfo := GetFileInfo(filePath)
+
+	if !fileInfo.IsDir() {
+		/* handling for file */
+		return append(GitFiles, getFileData(filePath))
+	}
+	return getDirData(filePath)
 }

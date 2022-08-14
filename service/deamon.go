@@ -37,4 +37,5 @@ func Deamon() {
 		fmt.Printf("%v. pushing %v Type: %v\n", index+1, s.Target, s.Type)
 		_github.Push(s.SymlinkAddress, "sync.ssh/")
 	}
+	fmt.Println("Pushing done!")
 }
