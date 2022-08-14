@@ -15,21 +15,19 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package github
+package utils
 
 import (
-	"context"
-
-	"github.com/google/go-github/github"
-	"golang.org/x/oauth2"
+	"github.com/meanii/sync.ssh/github"
+	"log"
 )
 
-func Github(token string) (context.Context, *github.Client) {
-	_context := context.Background()
-	tokenService := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
-	)
-	tokenClient := oauth2.NewClient(_context, tokenService)
-	client := github.NewClient(tokenClient)
-	return _context, client
+func CheckToken(token string) bool {
+	ctx, client := github.Github(token)
+	_, _, err := client.Users.Get(ctx, "meanii")
+	if err != nil {
+		log.Fatalf("failed to login with this token! Reason: %v", err)
+		return false
+	}
+	return true
 }
