@@ -18,7 +18,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package service
 
 import (
-	"fmt"
 	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/github"
 )
@@ -29,10 +28,8 @@ func BackupDB() {
 	_github := github.GitService{}
 
 	/* pushing user db  */
-	fmt.Println("pushing user db!")
 	_github.Push(user, "")
 
 	/* pushing sync db  */
-	fmt.Println("pushing sync db!")
 	_github.Push(sync, "")
 }
