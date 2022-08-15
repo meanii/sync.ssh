@@ -10,7 +10,7 @@ Requirement: go 1.19
 If you got golang in your machine, no you good to go, so we install it from the source
 
 ```shell
-git clone https://github.com/meanii/sync.ssh.git; cd sync.ssh; sudo bash install.sh
+git clone https://github.com/meanii/sync.ssh.git; cd sync.ssh; bash install.sh
 ```
 
 so this command gonna clone the source and install it in your machine and inject all daemon services and start it!

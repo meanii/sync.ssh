@@ -29,12 +29,15 @@ TIMER_FILE=service/sync.timer
 
 SYSTEMD_PATH=/lib/systemd/system/
 
-cat $SEVICE_FILE_BIN | sed "s|SYNCSSH_PATH|$SYNCSSH_PATH|g; s|USERNAME|$USER|g;" > $SEVICE_FILE
+USERNAME=$(whoami)
+echo "adding daemon for $USERNAME user!"
+
+sudo cat $SEVICE_FILE_BIN | sed "s|SYNCSSH_PATH|$SYNCSSH_PATH|g; s|USERNAME|$USERNAME|g;" > $SEVICE_FILE
 
 ## Coping Prepared Daemon file to the /lib/systemc/system
-echo "copping demon service files"
-cp $SEVICE_FILE $SYSTEMD_PATH
-cp $TIMER_FILE $SYSTEMD_PATH
+echo "copying demon service files"
+sudo cp $SEVICE_FILE $SYSTEMD_PATH
+sudo cp $TIMER_FILE $SYSTEMD_PATH
 
 ## Relaoding, Enabling and Starting the daemon services
 sudo systemctl daemon-reload
