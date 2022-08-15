@@ -43,6 +43,10 @@ var initCmd = &cobra.Command{
 		user := database.User{}
 		_ = user.Load()
 
+		if len(user.Token) == 0 {
+			log.Fatalf("You need to run 'sync.ssh auth --token=<TOKEN> --username=<GITHUB_USERNAME>' first, in order to init sync.ssh!")
+		}
+
 		/* getting the owner  */
 		currentUser, err := osuser.Current()
 		if err != nil {
@@ -59,7 +63,7 @@ var initCmd = &cobra.Command{
 		validator.CheckRepo(repo)
 
 		/* creating working dir */
-		workingDir := config.GetWorkingDir()
+		workingDir := config.GetWorkingPath()
 		utils.CreateWorkingDir(workingDir)
 		user.UserDBPath = config.GetUserDBPath()
 

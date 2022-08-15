@@ -24,7 +24,7 @@ type Sync struct {
 	Target         string    `json:"target"`
 	SymlinkAddress string    `json:"symlink_address"`
 	Type           string    `json:"fileType"`
-	CreatedAt      time.Time `json:"createdAt"`
 	Status         string    `json:"status"`
+	CreatedAt      time.Time `json:"createdAt"`
 	Owner          string    `json:"owner"`
 }

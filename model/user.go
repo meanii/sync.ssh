@@ -20,18 +20,17 @@ package model
 import "time"
 
 type User struct {
-	Id           string
-	Owner        string
-	Cronjob      int
-	LastCheckout time.Time
-	CreatedAt    time.Time
-	TotalSync    int
-	Auth         bool
-	Token        string
-	Repo         string
-	Github       string
-	Health       string
-	UserDBPath   string
-	SyncDBPath   string
-	SymlinkPath  string
+	Id          string    `json:"id"`
+	Owner       string    `json:"owner"`
+	Cronjob     int       `json:"cronjob"`
+	CreatedAt   time.Time `json:"createdAt"`
+	TotalSync   int       `json:"totalSync"`
+	Auth        bool      `json:"auth"`
+	Token       string    `json:"token"`
+	Repo        string    `json:"repo"`
+	Github      string    `json:"github"`
+	Health      string    `json:"health"`
+	UserDBPath  string    `json:"userDBPath"`
+	SyncDBPath  string    `json:"syncDBPath"`
+	SymlinkPath string    `json:"symlinkPath"`
 }

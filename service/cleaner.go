@@ -19,6 +19,8 @@ package service
 
 import (
 	"fmt"
+	"github.com/google/uuid"
+	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/model"
 	"log"
@@ -37,7 +39,7 @@ func exists(path string) (bool, error) {
 	return false, err
 }
 
-// change status to deleted, if found deleted file
+// Cleaner change status to deleted, if found deleted file
 func Cleaner(sync []model.Sync) {
 	for _, s := range sync {
 		file, _ := exists(s.SymlinkAddress)
@@ -51,4 +53,46 @@ func Cleaner(sync []model.Sync) {
 			_database.FindByIdAndDelete(s.Id)
 		}
 	}
+
+	/* cleaning the file, which isn't exists in the db! */
+	symlinkPath := config.GetSymlinkPath()
+	symlinkDirCleaner(symlinkPath, sync)
+}
+
+func symlinkDirCleaner(symlinkPath string, sync []model.Sync) {
+	files, err := os.ReadDir(symlinkPath)
+	historyDB := database.Histories{}
+	_ = historyDB.Load()
+	if err != nil {
+		log.Fatalf("Something went wrong while read %v dir!\n", symlinkPath)
+	}
+	for _, file := range files {
+		symPathItem := symlinkPath + "/" + file.Name()
+		isValidSymlinkFile := isValidFile(symPathItem, sync)
+		if !isValidSymlinkFile {
+			fmt.Printf("found not valid file %v\n", symPathItem)
+			err := os.RemoveAll(symPathItem)
+			if err != nil {
+				log.Fatalf("Something went wrong while deleted junk file! %v\n", symPathItem)
+			}
+
+			/* adding to history */
+			historyDB.Save(model.History{
+				Id:            uuid.New().String(),
+				Action:        "deleted",
+				RemarkMessage: fmt.Sprintf("found not a valid file while cleaing! File: %v", symlinkPath),
+			})
+
+		}
+	}
+}
+
+/* check if the file is exits in the sync db or not */
+func isValidFile(symPathItem string, sync []model.Sync) bool {
+	for _, s := range sync {
+		if symPathItem == s.SymlinkAddress {
+			return true
+		}
+	}
+	return false
 }

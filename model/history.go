@@ -15,21 +15,22 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package service
+package model
 
-import (
-	"github.com/meanii/sync.ssh/config"
-	"github.com/meanii/sync.ssh/github"
-)
+import "time"
 
-func BackupDB() {
-	user := config.GetUserDBPath()
-	sync := config.GetSyncDBPath()
-	_github := github.GitService{}
-
-	/* pushing user db  */
-	_github.Push(user, "")
-
-	/* pushing sync db  */
-	_github.Push(sync, "")
+type History struct {
+	Id             string    `json:"id"`
+	SyncId         string    `json:"syncId"`
+	Target         string    `json:"target"`
+	SymlinkAddress string    `json:"symlink_address"`
+	Type           string    `json:"fileType"`
+	Status         string    `json:"status"`
+	Owner          string    `json:"owner"`
+	CreatedAt      time.Time `json:"createdAt"`
+	UpdatedAt      time.Time `json:"updatedAt"`
+	Repo           string    `json:"repo"`
+	GithubUsername string    `json:"githubUsername"`
+	RemarkMessage  string    `json:"remarkMessage"`
+	Action         string    `json:"action"`
 }
