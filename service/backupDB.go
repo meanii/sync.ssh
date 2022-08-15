@@ -25,6 +25,8 @@ import (
 func BackupDB() {
 	user := config.GetUserDBPath()
 	sync := config.GetSyncDBPath()
+	history := config.GetHistoryPath()
+
 	_github := github.GitService{}
 
 	/* pushing user db  */
@@ -32,4 +34,7 @@ func BackupDB() {
 
 	/* pushing sync db  */
 	_github.Push(sync, "")
+
+	/* pushing history db  */
+	_github.Push(history, "")
 }
