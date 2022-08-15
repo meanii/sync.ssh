@@ -22,6 +22,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/database"
+	"github.com/meanii/sync.ssh/github"
+	"github.com/meanii/sync.ssh/service"
 	"github.com/meanii/sync.ssh/utils"
 	"github.com/meanii/sync.ssh/validator"
 	"github.com/spf13/cobra"
@@ -66,12 +68,20 @@ var initCmd = &cobra.Command{
 		utils.CreateWorkingDir(symlinkPath)
 		user.SymlinkPath = symlinkPath
 
+		/* creating README.md file while init */
+		readme := utils.GetReadme()
+		_github := github.GitService{}
+		_github.Push(readme.FilePath, "")
+
 		_ = user.Save(user)
 		fmt.Println("Your sync.ssh has been established!")
+
+		/* pushing db files */
+		service.BackupDB()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-	initCmd.Flags().StringP("repo", "r", "", "your github repositorie name, which your created for sync!")
+	initCmd.Flags().StringP("repo", "r", "", "your github repository name, which your created for sync!")
 }

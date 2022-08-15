@@ -23,7 +23,7 @@ import (
 	"github.com/meanii/sync.ssh/github"
 )
 
-func backupDB() {
+func BackupDB() {
 	user := config.GetUserDBPath()
 	sync := config.GetSyncDBPath()
 	_github := github.GitService{}

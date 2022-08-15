@@ -48,7 +48,7 @@ func Deamon() {
 	}
 
 	/* after pushing all file and dir push db as well */
-	backupDB()
+	BackupDB()
 
 	fmt.Println("Pushing done!")
 }
