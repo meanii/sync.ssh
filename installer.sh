@@ -21,6 +21,8 @@ echo "Installing sync.ssh"
 go install .
 go build .
 
+## better to remove if exist the sync.ssh binary
+sudo rm -rf /usr/bin/sync.ssh
 echo "creating symlink bin/sync.ssh"
 sudo ln -s $GOPATH/bin/sync.ssh /usr/bin/sync.ssh
 
