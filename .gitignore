@@ -1,2 +1,3 @@
 *.json
 service/sync.service
+sync.ssh

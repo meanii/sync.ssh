@@ -45,7 +45,7 @@ echo "copying demon service files"
 sudo cp $SEVICE_FILE $SYSTEMD_PATH
 sudo cp $TIMER_FILE $SYSTEMD_PATH
 
-## Relaoding, Enabling and Starting the daemon services
+## Reloading, Enabling and Starting the daemon services
 sudo systemctl daemon-reload
 sudo systemctl enable sync
 sudo systemctl enable sync.timer
