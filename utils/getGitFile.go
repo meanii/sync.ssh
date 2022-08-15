@@ -28,8 +28,6 @@ type GitFile struct {
 	FileName string
 }
 
-var GitFiles []GitFile
-
 func GetFileData(filePath string) GitFile {
 	data, err := os.ReadFile(filePath)
 	fileInfo := GetFileInfo(filePath)
@@ -44,6 +42,7 @@ func GetFileData(filePath string) GitFile {
 }
 
 func getDirData(filePath string) []GitFile {
+	var GitFiles []GitFile
 	files, err := os.ReadDir(filePath)
 	if err != nil {
 		log.Fatalf("Something went wrong while read %v dir!\n", filePath)
@@ -60,6 +59,7 @@ func getDirData(filePath string) []GitFile {
 }
 
 func GetGitFiles(filePath string) []GitFile {
+	var GitFiles []GitFile
 	fileInfo := GetFileInfo(filePath)
 
 	if !fileInfo.IsDir() {

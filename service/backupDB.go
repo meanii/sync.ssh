@@ -19,36 +19,20 @@ package service
 
 import (
 	"fmt"
-	"github.com/meanii/sync.ssh/database"
+	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/github"
 )
 
-func Deamon() {
-
-	/* initializing all needed intances */
-	_database := database.Database{}
-	_user := database.User{}
+func backupDB() {
+	user := config.GetUserDBPath()
+	sync := config.GetSyncDBPath()
 	_github := github.GitService{}
 
-	/* loading all dbs */
-	_ = _user.Load()
-	_ = _database.Load()
+	/* pushing user db  */
+	fmt.Println("pushing user db!")
+	_github.Push(user, "")
 
-	/* cleaning deleted files */
-	sync, _ := _database.Find()
-	Cleaner(sync)
-
-	/* reloading all data */
-	_ = _database.Load()
-	sync, _ = _database.Find()
-
-	for index, s := range sync {
-		fmt.Printf("%v. pushing %v Type: %v\n", index+1, s.Target, s.Type)
-		_github.Push(s.SymlinkAddress, "sync.ssh/")
-	}
-
-	/* after pushing all file and dir push db as well */
-	backupDB()
-
-	fmt.Println("Pushing done!")
+	/* pushing sync db  */
+	fmt.Println("pushing sync db!")
+	_github.Push(sync, "")
 }
