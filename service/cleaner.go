@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/model"
+	"log"
 	"os"
 )
 
@@ -39,14 +40,15 @@ func exists(path string) (bool, error) {
 // change status to deleted, if found deleted file
 func Cleaner(sync []model.Sync) {
 	for _, s := range sync {
-		if s.Status != "deleted" {
-			file, _ := exists(s.SymlinkAddress)
-			if !file {
-				fmt.Printf("found deleted file! %v\n", s.Target)
-				_database := database.Database{}
-				s.Status = "deleted"
-				_database.FineByIdAndUpdate(s.Id, s)
+		file, _ := exists(s.SymlinkAddress)
+		if !file {
+			fmt.Printf("found deleted file! %v\n", s.Target)
+			_database := database.Database{}
+			err := os.RemoveAll(s.SymlinkAddress)
+			if err != nil {
+				log.Fatalf("Something went wrong while deleted junk file! %v\n", s.SymlinkAddress)
 			}
+			_database.FindByIdAndDelete(s.Id)
 		}
 	}
 }

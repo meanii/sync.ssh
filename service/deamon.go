@@ -43,10 +43,8 @@ func Deamon() {
 	sync, _ = _database.Find()
 
 	for index, s := range sync {
-		if s.Status != "deleted" {
-			fmt.Printf("%v. pushing %v Type: %v\n", index+1, s.Target, s.Type)
-			_github.Push(s.SymlinkAddress, "sync.ssh/")
-		}
+		fmt.Printf("%v. pushing %v Type: %v\n", index+1, s.Target, s.Type)
+		_github.Push(s.SymlinkAddress, "sync.ssh/")
 	}
 	fmt.Println("Pushing done!")
 }

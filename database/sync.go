@@ -52,7 +52,7 @@ func (d *Database) InsertOne(sync model.Sync) error {
 	return nil
 }
 
-func (d *Database) FineByIdAndUpdate(Id string, sync model.Sync) {
+func (d *Database) FindByIdAndUpdate(Id string, sync model.Sync) {
 	var database Database
 	_database, _ := d.Find()
 	for _, s := range _database {
@@ -64,6 +64,17 @@ func (d *Database) FineByIdAndUpdate(Id string, sync model.Sync) {
 			s.SymlinkAddress = sync.SymlinkAddress
 		}
 		database = append(database, s)
+	}
+	d.Store(database)
+}
+
+func (d *Database) FindByIdAndDelete(Id string) {
+	var database Database
+	_database, _ := d.Find()
+	for _, s := range _database {
+		if s.Id != Id {
+			database = append(database, s)
+		}
 	}
 	d.Store(database)
 }
