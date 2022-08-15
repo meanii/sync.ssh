@@ -19,6 +19,10 @@
 ## Installing sync.ssh from the source
 echo "Installing sync.ssh"
 go install .
+go build .
+
+echo "creating symlink bin/sync.ssh"
+sudo ln -s $GOPATH/bin/sync.ssh /usr/bin/sync.ssh
 
 ## Preparing daemon file
 echo "setting up daemon services"
