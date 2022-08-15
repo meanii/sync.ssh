@@ -19,12 +19,18 @@ package model
 
 import "time"
 
-type Sync struct {
+type History struct {
 	Id             string    `json:"id"`
+	SyncId         string    `json:"syncId"`
 	Target         string    `json:"target"`
 	SymlinkAddress string    `json:"symlink_address"`
 	Type           string    `json:"fileType"`
 	Status         string    `json:"status"`
-	CreatedAt      time.Time `json:"createdAt"`
 	Owner          string    `json:"owner"`
+	CreatedAt      time.Time `json:"createdAt"`
+	UpdatedAt      time.Time `json:"updatedAt"`
+	Repo           string    `json:"repo"`
+	GithubUsername string    `json:"githubUsername"`
+	RemarkMessage  string    `json:"remarkMessage"`
+	Action         string    `json:"action"`
 }

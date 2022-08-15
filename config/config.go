@@ -52,11 +52,21 @@ func GetSyncDBPath() string {
 	return configPath + syncDb
 }
 
-func GetWorkingDir() string {
+func GetWorkingPath() string {
 	dirname, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	working := filepath.Join(dirname, ".meanii/sync")
 	return working
+}
+
+func GetHistoryPath() string {
+	historyDbPath := "/.history.json"
+	dirname, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
+	}
+	history := filepath.Join(dirname, ".meanii/sync")
+	return history + historyDbPath
 }

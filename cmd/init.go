@@ -63,7 +63,7 @@ var initCmd = &cobra.Command{
 		validator.CheckRepo(repo)
 
 		/* creating working dir */
-		workingDir := config.GetWorkingDir()
+		workingDir := config.GetWorkingPath()
 		utils.CreateWorkingDir(workingDir)
 		user.UserDBPath = config.GetUserDBPath()
 

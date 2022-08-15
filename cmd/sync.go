@@ -22,6 +22,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/model"
+	"github.com/meanii/sync.ssh/service"
 	"github.com/meanii/sync.ssh/utils"
 	"github.com/spf13/cobra"
 	"log"
@@ -47,9 +48,14 @@ var syncCmd = &cobra.Command{
 
 		/* initializing database and loading data */
 		db := &database.Database{}
+		history := database.Histories{}
 		err := db.Load()
 		if err != nil {
-			return
+			log.Fatalf("something went wrong while laoding sync db! Reason %v", err)
+		}
+		err = history.Load()
+		if err != nil {
+			log.Fatalf("something went wrong while laoding hitory db! Reason %v", err)
 		}
 
 		file, err := os.Open(target)
@@ -84,22 +90,44 @@ var syncCmd = &cobra.Command{
 			return
 		}
 
+		service.Cleaner(sync)
+
 		/* create symlink */
 		symlinkAddress := utils.CreateSymlink(target)
 
 		/* inserting data to the db */
+		_uuid := uuid.New().String()
+		typ := utils.IsDir(fileInfo)
+		createdAt := time.Now()
+		owner := currentUser.Username
+
 		err = db.InsertOne(model.Sync{
-			Id:             uuid.New().String(),
+			Id:             _uuid,
 			Target:         target,
-			Type:           utils.IsDir(fileInfo),
+			Type:           typ,
 			Status:         "active",
-			CreatedAt:      time.Now(),
-			Owner:          currentUser.Username,
+			CreatedAt:      createdAt,
+			Owner:          owner,
 			SymlinkAddress: symlinkAddress,
 		})
 		if err != nil {
 			fmt.Println("Something went wrong whiling inserting into the database!")
 		}
+
+		/* inserting in history */
+		history.Save(model.History{
+			Id:             uuid.New().String(),
+			SyncId:         _uuid,
+			Target:         target,
+			Type:           typ,
+			Status:         "active",
+			CreatedAt:      createdAt,
+			UpdatedAt:      createdAt,
+			Owner:          owner,
+			SymlinkAddress: symlinkAddress,
+			RemarkMessage:  "added to new sync!",
+		})
+
 		fmt.Printf("the %v '%v' has been added for sync!\n", utils.IsDir(fileInfo), fileInfo.Name())
 	},
 }

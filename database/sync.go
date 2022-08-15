@@ -60,7 +60,6 @@ func (d *Database) FindByIdAndUpdate(Id string, sync model.Sync) {
 			s.Owner = sync.Owner
 			s.Type = sync.Type
 			s.Target = sync.Target
-			s.Status = sync.Status
 			s.SymlinkAddress = sync.SymlinkAddress
 		}
 		database = append(database, s)
