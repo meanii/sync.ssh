@@ -52,6 +52,22 @@ func (d *Database) InsertOne(sync model.Sync) error {
 	return nil
 }
 
+func (d *Database) FineByIdAndUpdate(Id string, sync model.Sync) {
+	var database Database
+	_database, _ := d.Find()
+	for _, s := range _database {
+		if s.Id == Id {
+			s.Owner = sync.Owner
+			s.Type = sync.Type
+			s.Target = sync.Target
+			s.Status = sync.Status
+			s.SymlinkAddress = sync.SymlinkAddress
+		}
+		database = append(database, s)
+	}
+	d.Store(database)
+}
+
 func (d *Database) Find() (Database, error) {
 	var sync Database
 	data, err := os.ReadFile(syncPath)
@@ -94,4 +110,15 @@ func (d *Database) Load() error {
 	}
 
 	return nil
+}
+
+func (d *Database) Store(database Database) {
+	data, err := json.Marshal(database)
+	if err != nil {
+		log.Fatal("something went wrong while marshaling data!")
+	}
+	err = os.WriteFile(syncPath, data, 0644)
+	if err != nil {
+		log.Fatal("something went wrong while writing data!")
+	}
 }

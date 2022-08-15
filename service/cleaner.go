@@ -20,33 +20,33 @@ package service
 import (
 	"fmt"
 	"github.com/meanii/sync.ssh/database"
-	"github.com/meanii/sync.ssh/github"
+	"github.com/meanii/sync.ssh/model"
+	"os"
 )
 
-func Deamon() {
+// exists returns whether the given file or directory exists
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
 
-	/* initializing all needed intances */
-	_database := database.Database{}
-	_user := database.User{}
-	_github := github.GitService{}
-
-	/* loading all dbs */
-	_ = _user.Load()
-	_ = _database.Load()
-
-	/* cleaning deleted files */
-	sync, _ := _database.Find()
-	Cleaner(sync)
-
-	/* reloading all data */
-	_ = _database.Load()
-	sync, _ = _database.Find()
-
-	for index, s := range sync {
+// change status to deleted, if found deleted file
+func Cleaner(sync []model.Sync) {
+	for _, s := range sync {
 		if s.Status != "deleted" {
-			fmt.Printf("%v. pushing %v Type: %v\n", index+1, s.Target, s.Type)
-			_github.Push(s.SymlinkAddress, "sync.ssh/")
+			file, _ := exists(s.SymlinkAddress)
+			if !file {
+				fmt.Printf("found deleted file! %v\n", s.Target)
+				_database := database.Database{}
+				s.Status = "deleted"
+				_database.FineByIdAndUpdate(s.Id, s)
+			}
 		}
 	}
-	fmt.Println("Pushing done!")
 }
