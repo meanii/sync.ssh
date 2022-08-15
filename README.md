@@ -7,46 +7,49 @@
 
 Requirement: go 1.19
 
-If you got golang in your machine, no you good to go, so we install it from the source
+If you have golang installed, you may run the command below to install sync. ssh
 
 ```shell
 git clone https://github.com/meanii/sync.ssh.git && cd sync.ssh && bash installer.sh
 ```
 
-so this command gonna clone the source and install it in your machine and inject all daemon services and start it!
+Consequently, this command will clone the code, install it on your computer, inject all required daemon services, and
+launch the programme!
 
 ## How to use it
 
-so, after the installation there is few setups which you to do it!
+Therefore, there are a few setups that need to be completed after installation.
 
-- Create a private repository ( _you can use public repository but not recommanded_ )
-- Get github token with CRUD permission
-- Now, login sync.ssh with github by the token which you have created
+- Create a private repository (public repositories are permitted but not advised).
+- Obtain a github token with CRUD access.
+- Now, log in to github using sync.ssh and the token you created.
 
 ```shell
 sync.ssh auth --token=<TOKEN> --username=<GITHUB_USERNAME>
 ```
 
-- So, the last step is you need to init the sync.ssh by passsing --repo=<REPO_NAME> flag
+- The final step is to launch sync.ssh by using the —repo=<REPO_NAME> parameter.
 
 ```shell
 sync.ssh init --repo=<REPO_NAME> 
 ```
 
-So, its done now!
+So, it's done now!
 
-I would recommanded you to check the sync.ssh's daemon service, if its running or not
+I would recommend you to check the sync.ssh's daemon service, if it's running or not
 if its running, good! you can now sync dirs/files
+
+The daemon can be manually started via `sync.ssh deamon` will sync everything, so there!
 
 ### How to sync a file and dir
 
-its easier process, to sync any file you just need to run this below command
+It's a simpler approach; all you have to do is run the command below to sync any file.
 
 ```shell
 sync.ssh sync ~/Desktop/dotfile
 ```
 
-Here, `dotfile` is a dir - it gonna sync everything inside the dir
+Here, `dotfile` is a dir - it going to sync everything inside the dir
 
 In order to sync a file
 
