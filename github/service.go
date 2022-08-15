@@ -61,8 +61,25 @@ func (g *GitService) getRef() (ref *github.Reference, err error) {
 
 	var baseRef *github.Reference
 	if baseRef, _, err = g.Client.Git.GetRef(g.Ctx, *g.SourceOwner, *g.SourceRepo, "refs/heads/"+*g.BaseBranch); err != nil {
-		return nil, err
+
+		/* if found not init repo and creating README.md */
+		readme := utils.GetReadme()
+		_, _, err := g.Client.Repositories.CreateFile(
+			g.Ctx,
+			*g.SourceOwner,
+			*g.SourceRepo,
+			readme.FileName,
+			&github.RepositoryContentFileOptions{
+				Content: []byte(readme.Content),
+				Message: github.String("sync.ssh auto README.md commit!"),
+				SHA:     nil,
+			})
+		if err != nil {
+			log.Fatalf("failed to create new file: %v\n", err)
+		}
+		return g.getRef()
 	}
+
 	newRef := &github.Reference{Ref: github.String("refs/heads/" + *g.CommitBranch), Object: &github.GitObject{SHA: baseRef.Object.SHA}}
 	ref, _, err = g.Client.Git.CreateRef(g.Ctx, *g.SourceOwner, *g.SourceRepo, newRef)
 	return ref, err

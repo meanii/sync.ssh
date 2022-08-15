@@ -30,7 +30,7 @@ type GitFile struct {
 
 var GitFiles []GitFile
 
-func getFileData(filePath string) GitFile {
+func GetFileData(filePath string) GitFile {
 	data, err := os.ReadFile(filePath)
 	fileInfo := GetFileInfo(filePath)
 	if err != nil {
@@ -51,7 +51,7 @@ func getDirData(filePath string) []GitFile {
 
 	for _, file := range files {
 		if !file.IsDir() {
-			GitFiles = append(GitFiles, getFileData(filePath+"/"+file.Name()))
+			GitFiles = append(GitFiles, GetFileData(filePath+"/"+file.Name()))
 		} else {
 			getDirData(filePath + "/" + file.Name())
 		}
@@ -64,7 +64,7 @@ func GetGitFiles(filePath string) []GitFile {
 
 	if !fileInfo.IsDir() {
 		/* handling for file */
-		return append(GitFiles, getFileData(filePath))
+		return append(GitFiles, GetFileData(filePath))
 	}
 	return getDirData(filePath)
 }
