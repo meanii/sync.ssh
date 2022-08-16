@@ -34,8 +34,8 @@ func (g *GitService) init(files string) {
 	_ = user.Load()
 
 	baseBranch := "main"
-	authorName := "Anil"
-	authorEmail := "anilchauhanxda@gmail.com"
+	authorName := user.Name
+	authorEmail := user.EmailAddress
 	commitMessage := fmt.Sprintf("this is auto commit by sync.ssh!")
 
 	g.githubClient()

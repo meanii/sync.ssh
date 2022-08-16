@@ -20,6 +20,7 @@ package database
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/model"
 	"log"
@@ -32,6 +33,7 @@ type User model.User
 
 func (u *User) Save(user User) error {
 	/* marshalling the object */
+	fmt.Println(user)
 	data, err := json.Marshal(user)
 	if err != nil {
 		log.Fatal("something went wrong while marshaling data!")
