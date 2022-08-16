@@ -40,9 +40,10 @@ var authCmd = &cobra.Command{
 		user.Auth = true
 
 		/* validating, if toke is valid or not */
-		validator.CheckToken(token)
+		validator.CheckToken(token, username)
 
 		/* adding token and the username to the database */
+		_ = user.Load() /* loading fresh data */
 		_ = user.Save(user)
 	},
 }

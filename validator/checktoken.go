@@ -18,16 +18,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package validator
 
 import (
+	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/github"
 	"log"
 )
 
-func CheckToken(token string) bool {
+func CheckToken(token string, username string) bool {
 	ctx, client := github.Github(token)
-	_, _, err := client.Users.Get(ctx, "meanii")
+	user, _, err := client.Users.Get(ctx, username)
 	if err != nil {
 		log.Fatalf("failed to login with this token! Reason: %v", err)
 		return false
 	}
+
+	/* saving user's email to the database */
+	_user := database.User{}
+	_ = _user.Load()
+	_user.EmailAddress = *user.Email
+	_user.Name = *user.Name
+	_ = _user.Save(_user)
+
 	return true
 }
