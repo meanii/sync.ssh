@@ -19,12 +19,20 @@
 ## Installing sync.ssh from the source
 echo "Installing sync.ssh"
 go install .
-go build .
 
-## better to remove if exist the sync.ssh binary
-sudo rm -rf /usr/bin/sync.ssh
-echo "creating symlink bin/sync.ssh"
-sudo ln -s $GOPATH/bin/sync.ssh /usr/bin/sync.ssh
+## Checking, if golang weather installed or not
+if ! command -v go &> /dev/null
+then
+    echo "golang could not be found!"
+    exit
+fi
+
+## Checking got GOPATH ENV
+if [[ -z "${GOPATH}" ]];
+then
+  echo "GOPATH ENV couldn't found!"
+  exit
+fi
 
 ## Preparing daemon file
 echo "setting up daemon services"
@@ -53,5 +61,12 @@ sudo systemctl enable sync.timer
 sudo systemctl start sync
 sudo systemctl start sync.timer
 
-echo "sync.ssh installation has been done!"
-echo "try sync.ssh --help"
+## Checking, if sync.ssh is installed properly or not
+if ! command -v sync.ssh &> /dev/null
+then
+    echo "something went wrong while installing sync.ssh!"
+    exit
+else
+  echo "sync.ssh installation has been done!"
+  echo "try sync.ssh --help"
+fi
