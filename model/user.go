@@ -29,7 +29,7 @@ type User struct {
 	Token        string    `json:"token"`
 	Repo         string    `json:"repo"`
 	Github       string    `json:"github"`
-	Branch 		 string    `json:"branch"`
+	Branch 	     string    `json:"branch"`
 	EmailAddress string    `json:"emailAddress"`
 	Name         string    `json:"name"`
 	Health       string    `json:"health"`
