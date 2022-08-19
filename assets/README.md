@@ -1,6 +1,6 @@
-### This repository is maintained by [sync.ssh](http://github.com/meanii/sync.ssh)
+### This repo is maintained by [sync.ssh](http://github.com/meanii/sync.ssh)
 
-Please do not try to edit this repo!
+Please do not try to edit or any commit in this repo!
 
 ---
-For any help or assistance, go to [meanii/sync.ssh](https://github.com/meanii/sync.ssh/README.md)
+For any further helps go to [meanii/sync.ssh](https://github.com/meanii/sync.ssh/README.md) readme page
