@@ -30,6 +30,7 @@ func GetUserDBPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	configPath := filepath.Join(dirname, ".meanii/sync/config")
+	createWorkingDir(configPath)
 	return configPath + userDb
 }
 
@@ -39,6 +40,7 @@ func GetSymlinkPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	configPath := filepath.Join(dirname, ".meanii/sync/symlink")
+	createWorkingDir(configPath)
 	return configPath
 }
 
@@ -49,6 +51,7 @@ func GetSyncDBPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	configPath := filepath.Join(dirname, ".meanii/sync")
+	createWorkingDir(configPath)
 	return configPath + syncDb
 }
 
@@ -58,6 +61,7 @@ func GetWorkingPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	working := filepath.Join(dirname, ".meanii/sync")
+	createWorkingDir(working)
 	return working
 }
 
@@ -68,5 +72,14 @@ func GetHistoryPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	history := filepath.Join(dirname, ".meanii/sync")
+	createWorkingDir(history)
 	return history + historyDbPath
+}
+
+// for creating nested dir
+func createWorkingDir(folderPath string) {
+	err := os.MkdirAll(folderPath, os.ModePerm)
+	if err != nil {
+		log.Fatalf("Something went wrong while create dir! Reason %v", err)
+	}
 }
