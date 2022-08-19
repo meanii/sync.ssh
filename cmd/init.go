@@ -19,6 +19,10 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	osuser "os/user"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/meanii/sync.ssh/config"
 	"github.com/meanii/sync.ssh/database"
@@ -27,9 +31,6 @@ import (
 	"github.com/meanii/sync.ssh/utils"
 	"github.com/meanii/sync.ssh/validator"
 	"github.com/spf13/cobra"
-	"log"
-	osuser "os/user"
-	"time"
 )
 
 /* initCmd represents the init command */
@@ -39,6 +40,7 @@ var initCmd = &cobra.Command{
 	Long:  `this command for init all process, which is needed to start!`,
 	Run: func(cmd *cobra.Command, args []string) {
 		repo, _ := cmd.Flags().GetString("repo")
+		branch, _ := cmd.Flags().GetString("branch")
 
 		user := database.User{}
 		_ = user.Load()
@@ -56,7 +58,7 @@ var initCmd = &cobra.Command{
 		user.Id = uuid.New().String()
 		user.Owner = currentUser.Username
 		user.CreatedAt = time.Now()
-		user.Cronjob = 30
+		user.Branch = branch
 		user.Repo = repo
 
 		/* checking, if user has entered a valid repo or not */
@@ -88,4 +90,5 @@ var initCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().StringP("repo", "r", "", "your github repository name, which your created for sync!")
+	initCmd.Flags().StringP("branch", "b", "main", "your github repository branch, which you want to sync!")
 }
