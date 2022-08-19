@@ -49,7 +49,7 @@ It's a simpler approach; all you have to do is run the command below to sync any
 sync.ssh sync ~/Desktop/dotfile
 ```
 
-Here, `dotfile` is a dir - it going to sync everything inside the dir
+Here, `dotfile` is a dir - it's going to sync everything inside the dir
 
 In order to sync a file
 
@@ -59,7 +59,7 @@ sync.ssh sync ~/.gitconfig
 
 Here, `.gitconfig` is a file here, it will only sync the file!
 
-### may obtain a list
+### In order to see the list of all synced dir(s)/file(s)
 
 `sync.ssh list`
 
