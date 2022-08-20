@@ -45,6 +45,7 @@ var syncCmd = &cobra.Command{
 		}
 
 		var target = args[0]
+		gitPath, _ := cmd.Flags().GetString("path")
 
 		/* initializing database and loading data */
 		db := &database.Database{}
@@ -100,6 +101,7 @@ var syncCmd = &cobra.Command{
 		typ := utils.IsDir(fileInfo)
 		createdAt := time.Now()
 		owner := currentUser.Username
+		GitRootPath := utils.GitRootPathHandler(gitPath)
 
 		err = db.InsertOne(model.Sync{
 			Id:             _uuid,
@@ -107,6 +109,7 @@ var syncCmd = &cobra.Command{
 			Type:           typ,
 			Status:         "active",
 			CreatedAt:      createdAt,
+			GitRootPath:    GitRootPath,
 			Owner:          owner,
 			SymlinkAddress: symlinkAddress,
 		})
@@ -119,12 +122,14 @@ var syncCmd = &cobra.Command{
 			Id:             uuid.New().String(),
 			SyncId:         _uuid,
 			Target:         target,
+			GitRootPath:    GitRootPath,
 			Type:           typ,
 			Status:         "active",
 			CreatedAt:      createdAt,
 			UpdatedAt:      createdAt,
 			Owner:          owner,
 			SymlinkAddress: symlinkAddress,
+			Action:         "created new sync",
 			RemarkMessage:  "added to new sync!",
 		})
 
@@ -134,4 +139,5 @@ var syncCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(syncCmd)
+	syncCmd.Flags().StringP("path", "p", "", "your custom git path, where you want to push the file!")
 }
