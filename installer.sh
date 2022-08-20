@@ -46,6 +46,9 @@ SYSTEMD_PATH=/lib/systemd/system/
 USERNAME=$(whoami)
 echo "adding daemon for $USERNAME user!"
 
+## Coping bin to cp /usr/local/bin/
+sudo cp "$(which sync.ssh)" $SYNCSSH_PATH
+
 sudo cat $SEVICE_FILE_BIN | sed "s|SYNCSSH_PATH|$SYNCSSH_PATH|g; s|USERNAME|$USERNAME|g;" > $SEVICE_FILE
 
 ## Coping Prepared Daemon file to the /lib/systemc/system
