@@ -61,6 +61,7 @@ func (d *Database) FindByIdAndUpdate(Id string, sync model.Sync) {
 			s.Type = sync.Type
 			s.Target = sync.Target
 			s.SymlinkAddress = sync.SymlinkAddress
+			s.GitRootPath = sync.GitRootPath
 		}
 		database = append(database, s)
 	}

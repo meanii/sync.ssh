@@ -43,8 +43,14 @@ func Deamon() {
 	sync, _ = _database.Find()
 
 	for index, s := range sync {
-		fmt.Printf("%v. pushing %v Type: %v\n", index+1, s.Target, s.Type)
-		_github.Push(s.SymlinkAddress, "sync.ssh/")
+		if len(s.GitRootPath) != 0 {
+			/* handling. if it has custom git path */
+			fmt.Printf("%v. pushing %v in %v Type: %v\n", index+1, s.Target, s.GitRootPath, s.Type)
+			_github.Push(s.SymlinkAddress, "sync.ssh/"+s.GitRootPath)
+		} else {
+			fmt.Printf("%v. pushing %v Type: %v\n", index+1, s.Target, s.Type)
+			_github.Push(s.SymlinkAddress, "sync.ssh/")
+		}
 	}
 
 	/* after pushing all file and dir push db as well */
