@@ -74,12 +74,14 @@ var initCmd = &cobra.Command{
 		utils.CreateWorkingDir(symlinkPath)
 		user.SymlinkPath = symlinkPath
 
+		/* saving to database */
+		_ = user.Save(user)
+
 		/* creating README.md file while init */
 		readme := utils.GetReadme()
 		_github := github.GitService{}
 		_github.Push(readme.FilePath, "")
 
-		_ = user.Save(user)
 		fmt.Println("Your sync.ssh has been established!")
 
 		/* pushing db files */
