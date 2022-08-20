@@ -23,6 +23,7 @@ type History struct {
 	Id             string    `json:"id"`
 	SyncId         string    `json:"syncId"`
 	Target         string    `json:"target"`
+	GitRootPath    string    `json:"gitRootPath"`
 	SymlinkAddress string    `json:"symlink_address"`
 	Type           string    `json:"fileType"`
 	Status         string    `json:"status"`

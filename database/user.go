@@ -40,7 +40,7 @@ func (u *User) Save(user User) error {
 	/* writing the object to the db */
 	err = os.WriteFile(userPath, data, 0644)
 	if err != nil {
-		log.Fatal("something went wrong, while writing to db!")
+		log.Fatal("something went wrong, while writing to db!", err)
 	}
 	return nil
 }
