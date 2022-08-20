@@ -36,7 +36,7 @@ fi
 
 ## Preparing daemon file
 echo "setting up daemon services"
-SYNCSSH_PATH=$(which sync.ssh)
+SYNCSSH_PATH=/usr/local/bin/sync.ssh
 SEVICE_FILE_BIN=service/sync_bin.service
 SEVICE_FILE=service/sync.service
 TIMER_FILE=service/sync.timer
