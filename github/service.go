@@ -19,12 +19,13 @@ package github
 
 import (
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/google/go-github/github"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/model"
 	"github.com/meanii/sync.ssh/utils"
-	"log"
-	"time"
 )
 
 type GitService model.GithubSt
@@ -33,7 +34,7 @@ func (g *GitService) init(files string) {
 	user := database.User{}
 	_ = user.Load()
 
-	baseBranch := "main"
+	baseBranch := user.Branch
 	authorName := user.Name
 	authorEmail := user.EmailAddress
 	commitMessage := fmt.Sprintf("this is auto commit by sync.ssh!")
