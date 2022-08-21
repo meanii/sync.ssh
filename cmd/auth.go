@@ -37,13 +37,11 @@ var authCmd = &cobra.Command{
 
 		user.Token = token
 		user.Github = username
+		user.Branch = "main"
 		user.Auth = true
 
 		/* validating, if toke is valid or not */
-		validator.CheckToken(token, username)
-
-		/* adding token and the username to the database */
-		_ = user.Load() /* loading fresh data */
+		user.Name, user.EmailAddress = validator.CheckToken(token, username)
 		_ = user.Save(user)
 	},
 }

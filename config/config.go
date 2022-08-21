@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package config
 
 import (
+	"errors"
 	"log"
 	"os"
 	"path/filepath"
@@ -30,6 +31,7 @@ func GetUserDBPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	configPath := filepath.Join(dirname, ".meanii/sync/config")
+	createWorkingDir(configPath, &userDb)
 	return configPath + userDb
 }
 
@@ -39,6 +41,7 @@ func GetSymlinkPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	configPath := filepath.Join(dirname, ".meanii/sync/symlink")
+	createWorkingDir(configPath, nil)
 	return configPath
 }
 
@@ -49,6 +52,7 @@ func GetSyncDBPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	configPath := filepath.Join(dirname, ".meanii/sync")
+	createWorkingDir(configPath, &syncDb)
 	return configPath + syncDb
 }
 
@@ -58,6 +62,7 @@ func GetWorkingPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	working := filepath.Join(dirname, ".meanii/sync")
+	createWorkingDir(working, nil)
 	return working
 }
 
@@ -68,5 +73,28 @@ func GetHistoryPath() string {
 		log.Fatalf("something went wrong while getting $HOME! Reason %v", err)
 	}
 	history := filepath.Join(dirname, ".meanii/sync")
+	createWorkingDir(history, &historyDbPath)
 	return history + historyDbPath
+}
+
+// for creating nested dir and file fi not exists
+func createWorkingDir(folderPath string, filename *string) {
+
+	err := os.MkdirAll(folderPath, os.ModePerm)
+	if err != nil {
+		log.Fatalf("Something went wrong while create dir! Reason %v", err)
+	}
+	/* handling for creating new file if weather if exist or not */
+	if filename != nil {
+		filePath := folderPath + *filename
+		_, err = os.ReadFile(filePath)
+		if err != nil {
+			if errors.Is(err, os.ErrNotExist) {
+				err = os.WriteFile(filePath, []byte{}, 0644)
+				if err != nil {
+					log.Fatal("something went wrong while writing data!")
+				}
+			}
+		}
+	}
 }

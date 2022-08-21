@@ -23,6 +23,7 @@ type Sync struct {
 	Id             string    `json:"id"`
 	Target         string    `json:"target"`
 	SymlinkAddress string    `json:"symlink_address"`
+	GitRootPath    string    `json:"gitRootPath"`
 	Type           string    `json:"fileType"`
 	Status         string    `json:"status"`
 	CreatedAt      time.Time `json:"createdAt"`
