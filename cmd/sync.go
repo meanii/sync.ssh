@@ -102,7 +102,6 @@ var syncCmd = &cobra.Command{
 		createdAt := time.Now()
 		owner := currentUser.Username
 		GitRootPath := utils.GitRootPathHandler(gitPath)
-
 		err = db.InsertOne(model.Sync{
 			Id:             _uuid,
 			Target:         target,

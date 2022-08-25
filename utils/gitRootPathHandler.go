@@ -9,7 +9,7 @@ func GitRootPathHandler(path string) string {
 		validString = delChar(path, 0)
 	}
 	if !strings.HasSuffix(path, "/") {
-		validString = validString + "/"
+		validString = path + "/"
 	}
 	return validString
 }
