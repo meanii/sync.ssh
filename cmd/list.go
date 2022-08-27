@@ -45,6 +45,7 @@ try with -a, --all flag to show all list including deleted one!`,
 			Cells: []*simpletable.Cell{
 				{Align: simpletable.AlignCenter, Text: "ID"},
 				{Align: simpletable.AlignCenter, Text: "Target"},
+				{Align: simpletable.AlignCenter, Text: "GitPath"},
 				{Align: simpletable.AlignCenter, Text: "Type"},
 				{Align: simpletable.AlignCenter, Text: "Status"},
 				{Align: simpletable.AlignCenter, Text: "CreatedAt"},
@@ -52,10 +53,12 @@ try with -a, --all flag to show all list including deleted one!`,
 		}
 
 		/* appending items in the table array */
+
 		for _, s := range syncs {
 			cells = append(cells, *&[]*simpletable.Cell{
 				{Text: s.Id},
 				{Text: s.Target},
+				{Text: s.GitRootPath},
 				{Text: s.Type},
 				{Text: s.Status},
 				{Text: s.CreatedAt.Format(time.RFC822)},
