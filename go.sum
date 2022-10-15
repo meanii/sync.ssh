@@ -1,7 +1,5 @@
 github.com/alexeyco/simpletable v1.0.0 h1:ZQ+LvJ4bmoeHb+dclF64d0LX+7QAi7awsfCrptZrpHk=
 github.com/alexeyco/simpletable v1.0.0/go.mod h1:VJWVTtGUnW7EKbMRH8cE13SigKGx/1fO2SeeOiGeBkk=
-github.com/ararog/timeago v0.0.0-20160328174124-e9969cf18b8d h1:ZX0t+GA3MWiP7LWt5xWOphWRQd5JwL4VW5uLW83KM8g=
-github.com/ararog/timeago v0.0.0-20160328174124-e9969cf18b8d/go.mod h1:EcJ034SpbWy4heOSDiBZJRn3b5wKJM1b4sFfYeVAkI4=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=

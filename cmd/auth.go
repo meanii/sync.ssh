@@ -18,9 +18,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"fmt"
 	"github.com/meanii/sync.ssh/database"
 	"github.com/meanii/sync.ssh/validator"
 	"github.com/spf13/cobra"
+	"log"
 )
 
 /* authCmd represents the auth command */
@@ -31,6 +33,14 @@ var authCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		username, _ := cmd.Flags().GetString("username")
 		token, _ := cmd.Flags().GetString("token")
+
+		if len(username) <= 0 {
+			log.Fatalf("please provide github username!")
+		}
+
+		if len(token) <= 0 {
+			log.Fatalf("please provide your github access token!")
+		}
 
 		user := database.User{}
 		_ = user.Load() /* loading all the pre config */
@@ -43,6 +53,8 @@ var authCmd = &cobra.Command{
 		/* validating, if toke is valid or not */
 		user.Name, user.EmailAddress = validator.CheckToken(token, username)
 		_ = user.Save(user)
+
+		fmt.Println("you have been logged in now!, please prefer to init --repo=<repo_name>")
 	},
 }
 

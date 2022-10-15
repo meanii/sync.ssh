@@ -56,6 +56,7 @@ func (g *GitService) githubClient() {
 }
 
 func (g *GitService) getRef() (ref *github.Reference, err error) {
+
 	if ref, _, err = g.Client.Git.GetRef(g.Ctx, *g.SourceOwner, *g.SourceRepo, "refs/heads/"+*g.BaseBranch); err == nil {
 		return ref, nil
 	}

@@ -1,6 +1,6 @@
 module github.com/meanii/sync.ssh
 
-go 1.19
+go 1.18
 
 require (
 	github.com/alexeyco/simpletable v1.0.0
@@ -11,7 +11,6 @@ require (
 )
 
 require (
-	github.com/ararog/timeago v0.0.0-20160328174124-e9969cf18b8d // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
