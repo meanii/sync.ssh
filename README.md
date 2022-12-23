@@ -67,7 +67,7 @@ Here, `.gitconfig` is a file here, it will only sync the file!
 +--------------------------------------+--------------------------------------+------+--------+---------------------+
 |                  ID                  |                Target                | Type | Status |      CreatedAt      |
 +--------------------------------------+--------------------------------------+------+--------+---------------------+
-| 8985977f-c9f9-43de-a479-8530d147434c | /home/anii/.ssh                      | dir  | active | 15 Aug 22 09:09 IST |
+| 8985977f-c9f9-43de-a479-8530d147434c | /home/anii/.ssh                      | dir  | active | 22 Dec 22 09:09 IST |
 | cafe8bd8-94e2-4a05-9538-d4e4f1213a46 | /home/anii/.bashrc                   | file | active | 15 Aug 22 09:10 IST |
 | 5119586c-6b89-4f6a-a095-97d89dd3349c | /home/anii/.gitconfig                | file | active | 15 Aug 22 09:10 IST |
 | 4e2409f5-f146-42a1-80cd-4a4ae4887719 | /home/anii/.cobra.yaml               | file | active | 15 Aug 22 13:48 IST |
